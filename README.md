@@ -1,5 +1,5 @@
 # Third Person Imitation 
-This fork of rllab contains some experiments in third person imitation learning. See sandbox/bradly for the experiments. This is research code, released as is with no intentions to further improve upon it. 
+This fork of [third_person_im](https://github.com/bstadie/third_person_im) contains some experiments in third person imitation learning. The aim is to reproduce experiments from their [paper](https://arxiv.org/pdf/1703.01703.pdf) on stock gym/non-mujoco environments.
 
 # rllab
 
