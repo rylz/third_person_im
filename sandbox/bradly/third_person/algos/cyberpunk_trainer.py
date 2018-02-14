@@ -1,7 +1,6 @@
 import numpy as np
 from rllab.misc import tensor_utils
 from rllab.sampler.base import BaseSampler
-from sandbox.rocky.analogy.utils import unwrap
 
 
 class CyberPunkTrainer:
@@ -15,8 +14,8 @@ class CyberPunkTrainer:
 
         self.sess = tf_sess
 
-        self.novice_policy_env = unwrap(novice_policy_env)
-        self.expert_env = unwrap(expert_env)
+        self.novice_policy_env = novice_policy_env
+        self.expert_env = expert_env
 
         self.expert_success_pol = expert_success_pol
         self.expert_fail_pol = expert_fail_pol

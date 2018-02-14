@@ -100,18 +100,12 @@ class BatchPolopt(RLAlgorithm):
 
     def obtain_samples(self, itr):
         if self.max_path_length_schedule is not None:
-            max_path_length = self.max_path_length_schedule[itr]
-        else:
-            max_path_length = self.max_path_length
+            self.max_path_length = self.max_path_length_schedule[itr]
         if self.batch_size_schedule is not None:
             batch_size = self.batch_size_schedule[itr]
         else:
             batch_size = self.batch_size
-        return self.sampler.obtain_samples(
-            itr,
-            max_path_length=max_path_length,
-            batch_size=batch_size
-        )
+        return self.sampler.obtain_samples(itr)
 
     def process_samples(self, itr, paths):
         return self.sampler.process_samples(itr, paths)
