@@ -131,7 +131,7 @@ class CategoricalLSTMPolicy(StochasticPolicy, LayersPowered, Serializable):
         if self.state_include_action:
             prev_action_var = state_info_vars["prev_action"]
             prev_action_var = tf.cast(prev_action_var, tf.float32)
-            all_input_var = tf.concat(2, [obs_var, prev_action_var])
+            all_input_var = tf.concat([obs_var, prev_action_var], 2)
         else:
             all_input_var = obs_var
         if self.feature_network is None:

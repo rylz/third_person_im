@@ -85,7 +85,9 @@ class Discriminator(object):
         #return tf.Variable(tf.random_normal(filter_shape, mean=0.01, stddev=0.001, dtype=tf.float32))
 
     def get_loss_layer(self, pred, target_output):
-        cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, target_output))
+        # NB: guessed order of these arguments, may need to switch
+        # NB: softmax_cross_entropy_with_logits is deprecated
+        cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=target_output, logits=pred))
         optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(cost)
         return cost, optimizer
 
@@ -181,7 +183,7 @@ class ConvDiscriminator(Discriminator):
 
         conv_out_flat = tf.reshape(conv_layer_1, [-1, conv_out_size])
 
-        #fc_input = tf.concat(concat_dim=1, values=[conv_out_flat, state_input])
+        #fc_input = tf.concat([conv_out_flat, state_input], 1)
 
         fc_output = self.get_mlp_layers(conv_out_flat, n_mlp_layers, dim_hidden, dropout=None)
 
@@ -290,10 +292,10 @@ class VelocityDiscriminator(Discriminator):
         #cur_bias = self.init_bias([layer_size], name='b_feats_two')
         conv_two_features = tf.nn.relu(tf.matmul(cur_top, cur_weight) + cur_bias)
 
-        fc_input = tf.concat(concat_dim=1, values=[conv_one_features, conv_two_features])
+        fc_input = tf.concat([conv_one_features, conv_two_features], 1)
         #fc_input = conv_one_features - conv_two_features #try concat and RNN here.
 
-        #fc_input = tf.concat(concat_dim=1, values=[conv_out_flat, state_input])
+        #fc_input = tf.concat([conv_out_flat, state_input], 1)
 
         fc_output = self.get_mlp_layers(fc_input, n_mlp_layers, dim_hidden)
 
@@ -429,7 +431,7 @@ class DomainConfusionVelocityDiscriminator(Discriminator):
 
         conv_one_features_input_two = tf.nn.relu(tf.matmul(conv_out_flat_input_two, feat_weight) + feat_bias)
 
-        conv_out_features_concat = tf.concat(1, [conv_one_features_input_one, conv_one_features_input_two])
+        conv_out_features_concat = tf.concat([conv_one_features_input_one, conv_one_features_input_two], 1)
         #conv_out_features_concat = conv_one_features_input_one - conv_one_features_input_two
 
         self.conv_one_feats = conv_out_features_concat
@@ -465,7 +467,9 @@ class DomainConfusionVelocityDiscriminator(Discriminator):
         self.optimizer = self.get_optimizer(self.loss)
 
     def get_loss_layer(self, pred, target_output):
-        cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, target_output))
+        # NB: guessed order of these arguments, may need to switch
+        # NB: softmax_cross_entropy_with_logits is deprecated
+        cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=target_output, logits=pred))
         return cost
 
     def get_optimizer(self, loss):
@@ -641,7 +645,9 @@ class DomainConfusionDiscriminator(Discriminator):
         self.optimizer = self.get_optimizer(self.loss)
 
     def get_loss_layer(self, pred, target_output):
-        cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, target_output))
+        # NB: guessed order of these arguments, may need to switch
+        # NB: softmax_cross_entropy_with_logits is deprecated
+        cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=target_output, logits=pred))
         return cost
 
     def get_optimizer(self, loss):
