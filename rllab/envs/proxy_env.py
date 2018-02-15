@@ -9,6 +9,9 @@ class ProxyEnv(Env):
     def wrapped_env(self):
         return self._wrapped_env
 
+    def reset_trial(self):
+        return self._wrapped_env.reset_trial()
+
     def reset(self):
         return self._wrapped_env.reset()
 
